@@ -10,6 +10,6 @@ import com.easybytes.loans.model.Loans;
 @Repository
 public interface LoansRepository extends CrudRepository<Loans, Long> {
 	
-	List<Loans> findByCustomerIdOrderByStratDtDesc(int customerId);
+	List<Loans> findByCustomerIdOrderByStartDtDesc(int customerId);
 
 }
