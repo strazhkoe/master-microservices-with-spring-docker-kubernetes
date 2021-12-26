@@ -1,0 +1,13 @@
+docker build . easybytes/account             - build docker image from dockerfile
+docker run -d -p 8080:8080 easybytes/account - run a new instance of container from image
+docker ps                                    - list running containers
+docker ps -a                                 - list all containers
+docker stop <hash>                           - correctly stop the container
+docker kill <hash>                           - immediately stop the container
+docker start <hash>                          - start previously stopped container
+docker rm <hash>                             - remove the container
+docker logs <hash>                           - connect to container and see its logs
+docker images                                - list all images pulled
+-------
+
+mvn spring-boot:build-image
