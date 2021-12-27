@@ -8,6 +8,8 @@ docker start <hash>                          - start previously stopped containe
 docker rm <hash>                             - remove the container
 docker logs <hash>                           - connect to container and see its logs
 docker images                                - list all images pulled
+docker image tag <from> <to>                 - copy image with a new tag
+docker image rm <image>                      - remove image
 -------
 
 mvn spring-boot:build-image
