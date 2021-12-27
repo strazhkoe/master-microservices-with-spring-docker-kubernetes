@@ -54,7 +54,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 				    <image>
-				    	<name>easybytes/${project.artifactId}</name>
+				    	<name>strazhkoe/${project.artifactId}</name>
 				    </image>
 					<excludes>
 						<exclude>
