@@ -24,7 +24,7 @@ services:
     ports:
       - "9000:9000"
     networks:
-      - easybank-network 
+      - easybank-network
 
 networks:
   easybank-network:   

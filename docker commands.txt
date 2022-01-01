@@ -11,5 +11,8 @@ docker images                                - list all images pulled
 docker image tag <from> <to>                 - copy image with a new tag
 docker image rm <image>                      - remove image
 -------
+docker-compose up -d                         - run containers described in docker-coompose.yml
+docker-compose stop                          - stop previously run containers
+-------
 
 mvn spring-boot:build-image
