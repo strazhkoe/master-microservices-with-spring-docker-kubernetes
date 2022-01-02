@@ -26,8 +26,8 @@ services:
         max_attempts: 3
         window: 120s
     environment:
-      - SPRING_PROFILES_ACTIVE: default
-      - SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
   
   loans:
     image: strazhkoe/loans
@@ -45,8 +45,8 @@ services:
         max_attempts: 3
         window: 120s
     environment:
-      - SPRING_PROFILES_ACTIVE: default
-      - SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
 
   cards:
     image: strazhkoe/cards
@@ -64,8 +64,8 @@ services:
         max_attempts: 3
         window: 120s
     environment:
-      - SPRING_PROFILES_ACTIVE: default
-      - SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
 
 networks:
   easybank-network:   
