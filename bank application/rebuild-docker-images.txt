@@ -1,7 +1,0 @@
-cd accounts
-mvn package
-docker build . -t strazhkoe/accounts
-cd ../cards
-mvn spring-boot:build-image
-cd ../loans
-mvn spring-boot:build-image
