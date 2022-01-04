@@ -10,6 +10,25 @@ services:
     networks:
       - easybank-network
 
+  eurekaserver:
+    image: strazhkoe/eurekaserver
+    mem_limit: 700m
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    ports:
+      - "8070:8070"
+    networks:
+      - easybank-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
+
   accounts:
     image: strazhkoe/accounts:latest
     mem_limit: 700m
@@ -28,6 +47,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
   
   loans:
     image: strazhkoe/loans
@@ -47,6 +67,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
 
   cards:
     image: strazhkoe/cards
@@ -66,6 +87,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
 
 networks:
   easybank-network:   
