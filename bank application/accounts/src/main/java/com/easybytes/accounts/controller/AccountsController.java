@@ -59,7 +59,8 @@ public class AccountsController {
 	}
 	
 	@PostMapping("/myCustomerDetails")
-	@CircuitBreaker(name = "detailsForCustomerSupportApp")
+	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
+	                fallbackMethod = "myCustomerDetailFallBack")
 	public CustomerDetails myCustomerDetails(@RequestBody Customer customer) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
 		List<Cards> cardsDetails = cardsFeignClient.getCardsDetails(customer);
@@ -68,6 +69,17 @@ public class AccountsController {
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setAccounts(accounts);
 		customerDetails.setCards(cardsDetails);
+		customerDetails.setLoans(loansDetails);
+		
+		return customerDetails;
+	}
+	
+	private CustomerDetails myCustomerDetailFallBack(Customer customer, Throwable t) {
+		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
+		List<Loans> loansDetails = loansFeignClient.getLoansDetails(customer);
+		
+		CustomerDetails customerDetails = new CustomerDetails();
+		customerDetails.setAccounts(accounts);
 		customerDetails.setLoans(loansDetails);
 		
 		return customerDetails;
