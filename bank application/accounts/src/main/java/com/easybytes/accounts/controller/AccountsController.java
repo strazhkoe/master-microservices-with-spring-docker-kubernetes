@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
 public class AccountsController {
@@ -59,12 +60,13 @@ public class AccountsController {
 	}
 	
 	@PostMapping("/myCustomerDetails")
-	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
-	                fallbackMethod = "myCustomerDetailFallBack")
+//	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
+//	                fallbackMethod = "myCustomerDetailFallBack")
+	@Retry(name="retryForCustomerDetails", fallbackMethod = "myCustomerDetailFallBack")
 	public CustomerDetails myCustomerDetails(@RequestBody Customer customer) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
-		List<Cards> cardsDetails = cardsFeignClient.getCardsDetails(customer);
 		List<Loans> loansDetails = loansFeignClient.getLoansDetails(customer);
+		List<Cards> cardsDetails = cardsFeignClient.getCardsDetails(customer);
 		
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setAccounts(accounts);
