@@ -102,6 +102,9 @@ services:
     depends_on:
       - configserver
       - eurekaserver
+      - cards
+      - loans
+      - accounts
     deploy:
       restart_policy:
         condition: on-failure
