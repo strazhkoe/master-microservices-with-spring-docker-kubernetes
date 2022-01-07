@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easybytes.cards.model.Properties;
@@ -27,7 +28,8 @@ public class CardsController {
 	private CardsServiceConfig cardsConfig;
 	
 	@PostMapping("/myCards")
-	public List<Cards> getCardDetail(@RequestBody Customer customer) {
+	public List<Cards> getCardDetail(@RequestHeader("easybank-correlation-id") String correlationId,
+			                         @RequestBody Customer customer) {
 		List<Cards> cards = cardsRepository.findByCustomerId(customer.getCustomerId());
 
 		return cards;

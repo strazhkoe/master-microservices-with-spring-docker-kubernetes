@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easybytes.accounts.config.AccountsServiceConfig;
@@ -64,10 +65,11 @@ public class AccountsController {
 //	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
 //	                fallbackMethod = "myCustomerDetailFallBack")
 	@Retry(name="retryForCustomerDetails", fallbackMethod = "myCustomerDetailFallBack")
-	public CustomerDetails myCustomerDetails(@RequestBody Customer customer) {
+	public CustomerDetails myCustomerDetails(@RequestHeader("easybank-correlation-id") String correlationId,
+			                                 @RequestBody Customer customer) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
-		List<Loans> loansDetails = loansFeignClient.getLoansDetails(customer);
-		List<Cards> cardsDetails = cardsFeignClient.getCardsDetails(customer);
+		List<Loans> loansDetails = loansFeignClient.getLoansDetails(correlationId, customer);
+		List<Cards> cardsDetails = cardsFeignClient.getCardsDetails(correlationId, customer);
 		
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setAccounts(accounts);
@@ -83,9 +85,10 @@ public class AccountsController {
 		return "Hello!";
 	}
 	
-	private CustomerDetails myCustomerDetailFallBack(Customer customer, Throwable t) {
+	@SuppressWarnings("unused")
+	private CustomerDetails myCustomerDetailFallBack(String correlationId, Customer customer, Throwable t) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
-		List<Loans> loansDetails = loansFeignClient.getLoansDetails(customer);
+		List<Loans> loansDetails = loansFeignClient.getLoansDetails(correlationId, customer);
 		
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setAccounts(accounts);
@@ -94,6 +97,7 @@ public class AccountsController {
 		return customerDetails;
 	}
 	
+	@SuppressWarnings("unused")
 	private String sayHelloFallback(Throwable t) {
 		return "Say Hello Falling back";
 	}
