@@ -6,8 +6,10 @@ cd ../cards
 call mvn spring-boot:build-image
 cd ../loans
 call mvn spring-boot:build-image
-call cd ../eurekaserver
+cd ../eurekaserver
 call mvn spring-boot:build-image
-cd configserver
+cd ../configserver
+call mvn spring-boot:build-image
+cd ../gatewayserver
 call mvn spring-boot:build-image
 cd ..
