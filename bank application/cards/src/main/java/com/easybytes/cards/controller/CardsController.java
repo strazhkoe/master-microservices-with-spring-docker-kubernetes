@@ -28,7 +28,7 @@ public class CardsController {
 	private CardsServiceConfig cardsConfig;
 	
 	@PostMapping("/myCards")
-	public List<Cards> getCardDetail(@RequestHeader("easybank-correlation-id") String correlationId,
+	public List<Cards> getCardDetail(@RequestHeader(name = "easybank-correlation-id", required = false) String correlationId,
 			                         @RequestBody Customer customer) {
 		List<Cards> cards = cardsRepository.findByCustomerId(customer.getCustomerId());
 

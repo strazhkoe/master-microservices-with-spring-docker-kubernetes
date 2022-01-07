@@ -65,7 +65,7 @@ public class AccountsController {
 //	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
 //	                fallbackMethod = "myCustomerDetailFallBack")
 	@Retry(name="retryForCustomerDetails", fallbackMethod = "myCustomerDetailFallBack")
-	public CustomerDetails myCustomerDetails(@RequestHeader("easybank-correlation-id") String correlationId,
+	public CustomerDetails myCustomerDetails(@RequestHeader(name = "easybank-correlation-id", required = false) String correlationId,
 			                                 @RequestBody Customer customer) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
 		List<Loans> loansDetails = loansFeignClient.getLoansDetails(correlationId, customer);

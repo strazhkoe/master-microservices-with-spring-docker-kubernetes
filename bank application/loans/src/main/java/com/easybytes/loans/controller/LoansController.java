@@ -28,7 +28,7 @@ public class LoansController {
 	private LoansServiceConfig loansConfig;
 	
 	@PostMapping("/myLoans")
-	public List<Loans> getAccountDetails(@RequestHeader("easybank-correlation-id") String correlationId,
+	public List<Loans> getAccountDetails(@RequestHeader(name = "easybank-correlation-id", required = false) String correlationId,
 			                             @RequestBody Customer customer) {
 		System.out.println("Invoking getAccountsDetails");
 		List<Loans> loans = loansRepository.findByCustomerIdOrderByStartDtDesc(customer.getCustomerId());
