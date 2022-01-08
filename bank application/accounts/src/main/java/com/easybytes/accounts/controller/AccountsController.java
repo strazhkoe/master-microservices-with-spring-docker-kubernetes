@@ -2,6 +2,8 @@ package com.easybytes.accounts.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,8 @@ import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
 public class AccountsController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AccountsController.class);
 	
 	@Autowired
 	private AccountsRepository accountsRepository;
@@ -62,11 +66,12 @@ public class AccountsController {
 	}
 	
 	@PostMapping("/myCustomerDetails")
-//	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
-//	                fallbackMethod = "myCustomerDetailFallBack")
+	@CircuitBreaker(name = "detailsForCustomerSupportApp", 
+	                fallbackMethod = "myCustomerDetailFallBack")
 	@Retry(name="retryForCustomerDetails", fallbackMethod = "myCustomerDetailFallBack")
 	public CustomerDetails myCustomerDetails(@RequestHeader(name = "easybank-correlation-id", required = false) String correlationId,
 			                                 @RequestBody Customer customer) {
+		logger.info("myCustomerDetails() method started");
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
 		List<Loans> loansDetails = loansFeignClient.getLoansDetails(correlationId, customer);
 		List<Cards> cardsDetails = cardsFeignClient.getCardsDetails(correlationId, customer);
@@ -76,6 +81,7 @@ public class AccountsController {
 		customerDetails.setCards(cardsDetails);
 		customerDetails.setLoans(loansDetails);
 		
+		logger.info("myCustomerDetails() method ended");
 		return customerDetails;
 	}
 	

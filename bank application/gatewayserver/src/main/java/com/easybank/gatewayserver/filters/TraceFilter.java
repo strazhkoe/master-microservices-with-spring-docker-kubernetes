@@ -16,7 +16,8 @@ import reactor.core.publisher.Mono;
 
 
 @Order(1)
-@Component
+//We need to overwrite the name as it conflicts with sleuth
+@Component(value = "EasybankTraceFilter")
 public class TraceFilter implements GlobalFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(TraceFilter.class);
