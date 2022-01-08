@@ -16,3 +16,6 @@ docker-compose stop                          - stop previously run containers
 -------
 
 mvn spring-boot:build-image
+
+Zipkin
+docker run -d -p 9411:9411 openzipkin/zipkin

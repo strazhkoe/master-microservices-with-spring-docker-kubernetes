@@ -2,6 +2,14 @@ version: "3.8"
 
 services:
 
+  zipkin:
+    image: openzipkin/zipkin
+    mem_limit: 700m
+    ports:
+      - "9411:9411"
+    networks:
+      - easybank-network
+
   configserver:
     image: strazhkoe/configserver
     mem_limit: 700m
@@ -9,11 +17,18 @@ services:
       - "8071:8071"
     networks:
       - easybank-network
+    depends_on:
+      - zipkin
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_ZIPKIN_BASEURL=http://zipkin:9411/
+
 
   eurekaserver:
     image: strazhkoe/eurekaserver
     mem_limit: 700m
     depends_on:
+      - zipkin
       - configserver
     deploy:
       restart_policy:
@@ -28,6 +43,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
+      - SPRING_ZIPKIN_BASEURL=http://zipkin:9411/
 
   accounts:
     image: strazhkoe/accounts:latest
@@ -37,6 +53,7 @@ services:
     networks:
       - easybank-network
     depends_on:
+      - zipkin
       - configserver
       - eurekaserver
     deploy:
@@ -49,6 +66,7 @@ services:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
+      - SPRING_ZIPKIN_BASEURL=http://zipkin:9411/
   
   loans:
     image: strazhkoe/loans
@@ -58,6 +76,7 @@ services:
     networks:
       - easybank-network
     depends_on:
+      - zipkin
       - configserver
       - eurekaserver
     deploy:
@@ -70,6 +89,7 @@ services:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
+      - SPRING_ZIPKIN_BASEURL=http://zipkin:9411/
 
   cards:
     image: strazhkoe/cards
@@ -79,6 +99,7 @@ services:
     networks:
       - easybank-network
     depends_on:
+      - zipkin
       - configserver
       - eurekaserver
     deploy:
@@ -91,6 +112,7 @@ services:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
+      - SPRING_ZIPKIN_BASEURL=http://zipkin:9411/
 
   gatewayserver:
     image: strazhkoe/gatewayserver
@@ -100,6 +122,7 @@ services:
     networks:
       - easybank-network
     depends_on:
+      - zipkin
       - configserver
       - eurekaserver
       - cards
@@ -115,7 +138,7 @@ services:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_CONFIG_IMPORT=configserver:http://configserver:8071/
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8070/eureka/
-    
+      - SPRING_ZIPKIN_BASEURL=http://zipkin:9411/
 
 networks:
   easybank-network:   
