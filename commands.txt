@@ -19,3 +19,8 @@ mvn spring-boot:build-image
 
 Zipkin
 docker run -d -p 9411:9411 openzipkin/zipkin
+
+k8s
+kubectl get nodes                            - getting list of worker nodes
+kubectl get pods                             - getting list of pods
+kubectl get deployment                       - getting list of deployments
