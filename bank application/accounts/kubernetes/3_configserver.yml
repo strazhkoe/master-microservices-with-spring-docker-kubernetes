@@ -21,15 +21,15 @@ spec:
         - containerPort: 8071
         env:
         - name: SPRING_ZIPKIN_BASEURL
-          valuefrom:
+          valueFrom:
             configMapKeyRef:
               name: easybank-configmap
               key: SPRING_ZIPKIN_BASEURL
-        - name: SPRING_PROFILE_ACTIVE
-          valuefrom:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
             configMapKeyRef:
               name: easybank-configmap
-              key: SPRING_PROFILE_ACTIVE
+              key: SPRING_PROFILES_ACTIVE
 ---
 apiVersion: v1
 kind: Service

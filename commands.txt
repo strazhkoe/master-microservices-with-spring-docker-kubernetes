@@ -21,6 +21,25 @@ Zipkin
 docker run -d -p 9411:9411 openzipkin/zipkin
 
 k8s
-kubectl get nodes                            - getting list of worker nodes
-kubectl get pods                             - getting list of pods
-kubectl get deployment                       - getting list of deployments
+kubectl get nodes                            - getting a list of worker nodes
+kubectl get pods                             - getting a list of pods
+kubectl get deployment                       - getting a list of deployments
+kubectl get services                         - getiing a list of available services
+kubectl get replicaset                       - getting a list of replicasets
+kubectl get configmap                        - getting available config maps
+kubectl apply -f 1_configmaps.yml            - apply file. In this case - upload config map
+kubectl delete configmap <name>              - delete configmap by name
+kubectl get pods                             - getting a list of available pods
+
+kubectl scale deployment 
+<deployment-name> --replicas=3                                                    - changing number of replicas on the fly
+kubectl describe pod <pod name>                                                   - getting info about pod
+kubectl set image deployment accounts-deployment accounts=strazhkoe/accounts:k8s  - change docker image for container in deployment
+kubectl rollout history deployment <deployment name>                              - getting revisions information
+kubectl rollout undo deployment <deployment name> --to-revision=<revision number> - roll back to revision
+kubectl logs <pod name>                                                           - see logs of the pod
+
+kubectl get hpa                              - get horizontal pod auto scalings
+
+kubectl autoscale deployment accounts-deployment --min=3 --max=10 --cpu-percent=70
+

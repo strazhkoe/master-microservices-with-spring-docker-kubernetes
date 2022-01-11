@@ -21,17 +21,17 @@ spec:
         - containerPort: 8070
         env:
         - name: SPRING_ZIPKIN_BASEURL
-          valuefrom:
+          valueFrom:
             configMapKeyRef:
               name: easybank-configmap
               key: SPRING_ZIPKIN_BASEURL
-        - name: SPRING_PROFILE_ACTIVE
-          valuefrom:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
             configMapKeyRef:
               name: easybank-configmap
-              key: SPRING_PROFILE_ACTIVE
+              key: SPRING_PROFILES_ACTIVE
         - name: SPRING_CONFIG_IMPORT
-          valuefrom:
+          valueFrom:
             configMapKeyRef:
               name: easybank-configmap
               key: SPRING_CONFIG_IMPORT
